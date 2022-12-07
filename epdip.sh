@@ -7,7 +7,6 @@
 POSITIONAL_ARGS=()
 SLIENCE=NO
 
-
 if [[ $# -lt 1 ]]; then
   echo "Usage: ./epdip.sh [-f ip_range_file / ip_range] [-m] [-o output_file] [-s]
 
@@ -69,26 +68,21 @@ function expandIpRanges {
     if [[ ${SLIENCE} = NO ]]; then
         printf "Expanding ${1}...\n"
     fi
-    eval $(printf ${1} | awk -F'[.-]' '{}END{print "A=\""$1"\"; B=\""$2"\"; C=\""$3"\"; D=\""$4"\";E=\""$5"\"; F=\""$6"\";G=\""$7"\"; H=\""$8"\";"}')
-    IP1_DEC=$(( 16777216*${A} + 65536*${B} + 256*${C} + ${D} ))
-    IP2_DEC=$(( 16777216*${E} + 65536*${F} + 256*${G} + ${H} ))
+    eval $(printf ${1} | awk -F'[.-]' '{print "IP1_DEC=$(( 16777216*"$1"+65536*"$2"+256*"$3"+"$4" )); IP2_DEC=$(( 16777216*"$5"+65536*"$6"+256*"$7"+"$8" ));"}')
     for IP_DEC in $(seq ${IP1_DEC} ${IP2_DEC}); do
         TEMP=${IP_DEC}
-        D=$(( ${TEMP} & 255 ))
-        if [[ D -eq 0 ]]; then
+        IP=$(( ${TEMP} & 255 ))
+        if [[ IP -eq 0 ]]; then
             continue
         fi
-        TEMP=$(( ${TEMP} >> 8 ))
-        C=$(( ${TEMP} & 255 ))
-        TEMP=$(( ${TEMP} >> 8 ))
-        B=$(( ${TEMP} & 255 ))
-        TEMP=$(( ${TEMP} >> 8 ))
-        A=$(( ${TEMP} & 255 ))
+        IP=$(( (${TEMP} >> 8) & 255 ))".${IP}"
+        IP=$(( (${TEMP} >> 16) & 255 ))".${IP}"
+        IP=$(( (${TEMP} >> 24) & 255 ))".${IP}"
         
         if [[ -n ${OUTPUTFILE} ]]; then
-            printf "${A}.${B}.${C}.${D}\n" >> ${OUTPUTFILE}
+            printf "${IP}\n" >> ${OUTPUTFILE}
         else
-            printf "${A}.${B}.${C}.${D}\n"
+            printf "${IP}\n"
         fi
     done
     if [[ ${SLIENCE} = NO ]]; then
