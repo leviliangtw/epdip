@@ -1,6 +1,12 @@
 # epdip
 A simple but efficient script for expanding IP addresses in dash format, optimized with bitwise operations and multithreading. 
 
+## Cheat Sheet
+
+* `./epdip.sh A.B.C.D-E.F.G.H -s`
+* `./epdip.sh A.B.C.D-E.F.G.H -o ips.list`
+* `./epdip.sh -f ip_ranges.list -m -o ips.list`
+
 ## Context
 
 Sometimes, you might get ip addresses in a **dash format** like `A.B.C.D-E.F.G.H`: 
@@ -119,9 +125,3 @@ $ ./epdip.sh -f ip_ranges.list -s
 10.10.15.1
 10.10.15.2
 ```
-
-## Cheat Sheet
-
-* `./epdip.sh A.B.C.D-E.F.G.H -s`
-* `./epdip.sh A.B.C.D-E.F.G.H -o ips.list`
-* `./epdip.sh -f ip_ranges.list -m -o ips.list`
