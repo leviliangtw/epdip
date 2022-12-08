@@ -5,7 +5,7 @@
 # https://github.com/leviliangtw
 
 POSITIONAL_ARGS=()
-SLIENCE=NO
+SILENCE=YES
 
 if [[ $# -lt 1 ]]; then
   echo "Usage: ./epdip.sh [-f ip_range_file / ip_range] [-m] [-o output_file] [-s]
@@ -24,6 +24,7 @@ fi
 while [[ $# -gt 0 ]]; do
   case $1 in
     -f|--file)
+      SILENCE=NO
       FILE="$2"
       shift # past argument
       shift # past value
@@ -38,7 +39,7 @@ while [[ $# -gt 0 ]]; do
       shift # past value
       ;;
     -s|--silence)
-      SLIENCE=YES
+      SILENCE=YES
       shift # past argument
       ;;
     -*|--*)
@@ -65,7 +66,7 @@ if [[ -n ${OUTPUTFILE} ]]; then
 fi
 
 function expandIpRanges {
-    if [[ ${SLIENCE} = NO ]]; then
+    if [[ ${SILENCE} = NO ]]; then
         printf "Expanding ${1}...\n"
     fi
     eval $(printf ${1} | awk -F'[.-]' '{print "IP1_DEC=$(( 16777216*"$1"+65536*"$2"+256*"$3"+"$4" )); IP2_DEC=$(( 16777216*"$5"+65536*"$6"+256*"$7"+"$8" ));"}')
@@ -85,7 +86,7 @@ function expandIpRanges {
             printf "${IP}\n"
         fi
     done
-    if [[ ${SLIENCE} = NO ]]; then
+    if [[ ${SILENCE} = NO ]]; then
         printf "Expanding ${1} succeeded!\n"
     fi
 }

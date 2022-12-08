@@ -11,13 +11,13 @@ A simple but efficient script for expanding IP addresses in dash format, optimiz
 
 Sometimes, you might get ip addresses in a **dash format** like `A.B.C.D-E.F.G.H`: 
 
-```shell
+```
 10.10.10.253-10.10.11.3
 ```
 
 However, what you need is a complete list of addresses: 
 
-```shell
+```
 10.10.10.253
 10.10.10.254
 10.10.10.255
@@ -32,7 +32,7 @@ So, here is the **`epdip`** for you!
 
 First, you can check the usage by simply execute `epdip` alone: 
 
-```shell
+```
 $ ./epdip.sh
 Usage: ./epdip.sh [-f ip_range_file / ip_range] [-m] [-o output_file] [-s]
 
@@ -48,7 +48,7 @@ Usage: ./epdip.sh [-f ip_range_file / ip_range] [-m] [-o output_file] [-s]
 
 As for the simplest scene, let's take expanding `10.10.10.253-10.10.11.3` for example: 
 
-```shell
+```
 $ ./epdip.sh 10.10.10.253-10.10.11.3
 Expanding 10.10.10.253-10.10.11.3...
 10.10.10.253
@@ -116,7 +116,7 @@ $ cat ips.list
 
 When you would like to remove the information messages: 
 
-```shell
+```
 $ ./epdip.sh -f ip_ranges.list -s
 10.10.10.255
 10.10.11.1
@@ -125,3 +125,22 @@ $ ./epdip.sh -f ip_ranges.list -s
 10.10.15.1
 10.10.15.2
 ```
+
+## Performance Increasing
+
+* Normal Execution:
+    ```
+    $ time ./epdip.sh -f ip_range.list -o ips.list -s
+
+    real    0m26,176s
+    user    0m19,856s
+    sys     0m6,288s
+    ```
+* Multithreading Execution:
+    ```
+    $ time ./epdip.sh -f ip_range.list -o ips.list -m -s
+
+    real    0m7,437s
+    user    0m25,613s
+    sys     0m9,079s
+    ```
